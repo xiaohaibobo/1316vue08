@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="./js/vue.js"></script>
+<script src="./js/router.js"></script>
+<script>
+    const phone = {
+        template: `<div>手机</div>`
+    }
+    const hot = {
+        template: `<div>热门</div>`
+    }
+    const day = {
+        template: `<div>日常</div>`
+    }
+    const home = {
+        template: `
+        <div>
+            <router-link to='/home/phone'>手机</router-link>
+            <router-link to='/home/hot'>热门</router-link>
+            <router-link to='/home/day'>日常</router-link>
+            <router-view />
+        </div>
+        `
+    }
+
+    const active = {
+        template: `<div>这是活动内容</div>`
+    }
+    const news = {
+        template: `<div>这是新闻内容</div>`
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/home',
+                component: home,
+                name: "home",
+                children: [
+                    {
+                        path: '/home/phone',
+                        component: phone
+                    },
+                    {
+                        path: '/home/hot',
+                        component: hot
+                    },
+                    {
+                        path: '/home/day',
+                        component: day
+                    },
+                    {
+                        path: '/',
+                        redirect: '/home/phone'
+                    },
+                ]
+            },
+            {
+                path: '/active',
+                component: active,
+                name: "active"
+            },
+            {
+                path: '/news',
+                component: news,
+                name: "news"
+            },
+            {
+                path: '/',
+                redirect: '/home'
+            }
+        ]
+    })
+
+    let App = {
+        template: `
+        <div id='app'>
+          <input type="button" value='首页' @click='fun("home")'/>
+          <input type="button" value='活动' @click='fun("active")'/>
+          <input type="button" value='新闻' @click='fun("news")'/>
+            <router-view />
+        </div>
+        
+        `,
+        methods: {
+            fun(name) {
+                this.$router.push({ name: name })
+                // this.$router.replace({ name: name })
+            }
+        },
+    }
+
+    let vm = new Vue({
+        el: '#app',
+        render: h => h(App),
+        components: { App },
+        router
+    })
+</script>
+
+</html>
