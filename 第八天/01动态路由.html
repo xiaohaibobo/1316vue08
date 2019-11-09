@@ -1,32 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <div id='app'>
-        <a href="#">首页</a>
-        <a href="#">新闻</a>
-        <a href="#">攻略</a>
-        <div>
-            <h3>首页</h3>
-            <p>首页的内容..<span>2018-07-22</span></p>
-        </div>
-        <div>
-            <h3新闻</h3>
-            <p>新闻的内容..<span>2018-07-23</span></p>
-        </div>
-        <div>
-            <h3>攻略</h3>
-            <p>攻略的内容..<span>2018-07-24</span></p>
-        </div>
     </div>
 </body>
+<script src="../js/vue.js"></script>
+<script src="../js/router.js"></script>
+<script src="../js/axios.js"></script>
 <script>
     //使用动态路由实现以上效果。
     //路由内组件的数据通过data.json获取
+    const home = {
+        template: `
+        <div>
+            <h3>{{titel}}</h3>
+            <p>{{content}}<span>{{date}}</span></p>
+        </div>
+        `,
+        data() {
+            return {
+                titel: '',
+                content: '',
+                date: ''
+            }
+        },
+        created() {
+            console.log('joujoiooij', this.data)
+        },
+        props: ['data'],
+        watch: {
+            '$route.path': {
+                immediate: true,
+                handler() {
+                    let path = this.$route.params.path;
+                    setTimeout(() => {
+                        this.titel = this.data[path].titel;
+                        this.content = this.data[path].content;
+                        this.date = this.data[path].date;
+                    }, 0);
+
+                }
+            }
+        },
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/:path',
+                component: home
+            },
+            {
+                path: '/',
+                redirect: '/home'
+            }
+        ]
+    })
+    let App = {
+        template: `
+    <div id='app'>
+        <router-link to='/home'>首页</router-link>
+        <router-link to='/news'>新闻</router-link>
+        <router-link to='/guides'>攻略</router-link>
+        <router-view :data='data' />
+    </div>
+    `,
+        data() {
+            return {
+                data: {}
+            }
+        },
+        created() {
+            axios.get('data.json').then((data) => {
+                this.data = data.data
+            })
+        },
+    }
+    let vm = new Vue({
+        el: '#app',
+        render: h => h(App),
+        components: { App },
+        router
+
+    })
 </script>
+
 </html>
