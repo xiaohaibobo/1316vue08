@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="./js/vue.js"></script>
+<script src="./js/router.js"></script>
+<script>
+    const home = {
+        template: `
+        <div>
+            <h3>{{title}}</h3>
+            <p>{{content}}</p>
+        </div>
+        `,
+        data() {
+            return {
+                title: '',
+                content: ''
+            }
+        },
+        props: ['data'],
+        watch: {
+            '$route.path': {
+                immediate: true,
+                handler() {
+                    let path = this.$route.path.substr(1)
+                    this.title = this.data[path].title
+                    this.content = this.data[path].content
+                }
+            }
+        },
+    }
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/home',
+                component: home
+            },
+            {
+                path: '/active',
+                component: home
+            },
+            {
+                path: '/news',
+                component: home
+            },
+            {
+                path: '/',
+                redirect: '/home'
+            },
+        ]
+
+    })
+
+    let App = {
+        template: `
+        <div id='app'>				
+				<router-link to='/home'>首页</router-link>
+				<router-link to='/active'>活动</router-link>
+				<router-link to='/news'>新闻</router-link>					
+				<router-view :data='data' />					
+		</div>
+        `,
+        created() {
+            console.log(this.$route)
+        },
+        data() {
+            return {
+                data: {
+                    home: {
+                        title: '首页标题',
+                        content: "首页内容"
+                    },
+                    active: {
+                        title: '活动标题',
+                        content: "活动内容"
+                    },
+                    news: {
+                        title: '新闻标题',
+                        content: "新闻内容"
+                    },
+                }
+            }
+        },
+    }
+    let vm = new Vue({
+        el: '#app',
+        render: h => h(App),
+        components: { App },
+        router
+    })
+</script>
+
+</html>

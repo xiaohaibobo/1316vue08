@@ -13,6 +13,47 @@
 </body>
 <script src="./js/axios.js"></script>
 <script>
+    //get请求
+    // axios.get('data.json').then(function (data) {
+    //     console.log(data)
+    // })
+
+
+    //get请求并发送数据
+    // axios.get('data.json?fn=10').then(function (data) {
+    //     console.log(data)
+    // })
+
+    //get请求发送数据，可以写成第二个参数
+    // axios.get('data.json', { params: { age: 10 } }).then(function(data){
+    //     console.log(data)
+    // })
+    // axios.get('data.json',{       // 还可以直接把参数拼接在url后边
+    //     params:{
+    //         title:'眼镜'
+    //     }
+    // }).then(function(res){
+    //     this.goodsList = res.data;
+    // }).catch(function (error) {
+    //     console.log(error);
+    // });
+
+    // axios.post('data.json',{params:{
+    //     'name':200
+    // }}).then(function(data){
+    //     console.log(data)
+    // })
+
+    axios({
+        method: 'GET',
+        url: 'data1.json',
+        params: { fn: 10 }
+    }).then(function (data) {
+        console.log(data)
+    }).catch(function(err){
+        console.log(err.response.status)
+    })
 
 </script>
+
 </html>
