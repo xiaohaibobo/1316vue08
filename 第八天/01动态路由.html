@@ -32,9 +32,6 @@
                 date: ''
             }
         },
-        created() {
-            console.log('joujoiooij', this.data)
-        },
         props: ['data'],
         watch: {
             '$route.path': {
@@ -45,7 +42,7 @@
                         this.titel = this.data[path].titel;
                         this.content = this.data[path].content;
                         this.date = this.data[path].date;
-                    }, 0);
+                    }, 100);
 
                 }
             }
